@@ -18,6 +18,7 @@ specifiers:
   autoprefixer: ^10.4.14
   eslint: ^8.36.0
   eslint-config-next: ^13.2.4
+  hashids: ^2.2.11
   next: ^13.2.4
   next-auth: 4.20.1
   postcss: ^8.4.21
@@ -39,6 +40,7 @@ dependencies:
   '@trpc/next': 10.19.1_ignh3qt62oolsnzmbc2jz5i2ae
   '@trpc/react-query': 10.19.1_ctnjxqnm464aolergljm3ebpq4
   '@trpc/server': 10.19.1
+  hashids: 2.2.11
   next: 13.3.0_biqbaboplfbrettd7655fr4n2y
   next-auth: 4.20.1_yucv4tfv7v7nrkw2uguegj6e7e
   react: 18.2.0
@@ -1596,6 +1598,10 @@ packages:
     dependencies:
       function-bind: 1.1.1
     dev: true
+
+  /hashids/2.2.11:
+    resolution: {integrity: sha512-e1rAPT5Wa9vf/Dq1eq8LFw5VH2dtKxRf6k9bCw0GLwKL/SRnUphIcqwJWUZ1ki18cdj03nCrpdlJOcyHILQk8Q==}
+    dev: false
 
   /ignore/5.2.4:
     resolution: {integrity: sha512-MAb38BcSbH0eHNBxn7ql2NH/kX33OkB3lZ1BNdh7ENeRChHTYsTvWrMubiIAMNS2llXEEgZ1MUOBtXChP3kaFQ==}
