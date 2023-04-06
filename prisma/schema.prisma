@@ -14,12 +14,6 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-model Example {
-    id        String   @id @default(cuid())
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-}
-
 // Necessary for Next auth
 model Account {
     id                String  @id @default(cuid())
@@ -48,13 +42,14 @@ model Session {
 }
 
 model User {
-    id            String    @id @default(cuid())
+    id            String           @id @default(cuid())
     name          String?
-    email         String?   @unique
+    email         String?          @unique
     emailVerified DateTime?
     image         String?
     accounts      Account[]
     sessions      Session[]
+    events        UserEventPivot[]
 }
 
 model VerificationToken {
@@ -63,4 +58,44 @@ model VerificationToken {
     expires    DateTime
 
     @@unique([identifier, token])
+}
+
+model Example {
+    id        String   @id @default(cuid())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+model UserEventPivot {
+    user     User     @relation(fields: [userId], references: [id])
+    userId   String
+    event    Event    @relation(fields: [eventId], references: [id])
+    eventId  Int
+    joinDate DateTime @default(now())
+
+    @@id([userId, eventId])
+}
+
+model Place {
+    id     Int     @id @default(autoincrement())
+    label  String?
+    lng    Float
+    lat    Float
+    events Event[]
+}
+
+model Event {
+    id Int @id @default(autoincrement())
+
+    //what
+    title   String
+    //where
+    place   Place?           @relation(fields: [placeId], references: [id])
+    placeId Int?
+    //when
+    date    DateTime
+    //who
+    users   UserEventPivot[]
+
+    description String
 }
