@@ -19,13 +19,13 @@ export function IconHowler({
       <circle cx="237" cy="237" r="220" fill="#fff" />
       <path
         stroke="#000"
-        stroke-width="21"
+        strokeWidth="21"
         d="M 237 17 A 220 220 0 0 1 457 237"
       />
       <path
         stroke="#172554"
         fill="#2563eb"
-        stroke-width="14"
+        strokeWidth="14"
         d="M 326.5 351
         L 289 449
         A 220 220 0 0 1 50.5 352.5
@@ -47,7 +47,7 @@ export function IconHowler({
       />
       <path
         stroke="#000"
-        stroke-width="21"
+        strokeWidth="21"
         d="M 237 17 A 220 220 0 1 0 457 237 "
       />
     </svg>

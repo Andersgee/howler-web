@@ -31,19 +31,17 @@ Props) {
   );
 }
 
-export function InputDate({
+export function InputWhen({
   className,
   date,
   onChange,
 }: //...rest
 Props) {
   return (
-    <div className="relative flex w-64 justify-between bg-white px-1 py-1">
-      <span className="absolute left-2 flex-1 pr-1 text-neutral-400">
-        When?
-      </span>
+    <div className="relative flex w-60 justify-between bg-white ">
+      <span className="absolute left-2 top-1 pr-1 text-neutral-400">When?</span>
       <input
-        className="w-full pl-24"
+        className="w-full py-1 pl-24 pr-1 "
         //type="datetime-local"
         type="date"
         value={dateString(date)}
