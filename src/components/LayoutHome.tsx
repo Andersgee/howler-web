@@ -10,6 +10,7 @@ import { hashidFromNumber } from "src/utils/hashids";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { startOfDay } from "date-fns";
+import { IconArrowLink } from "src/icons/ArrowLink";
 
 const OPTIONS_WHO = {
   a: "Who? (anyone)",
@@ -128,7 +129,7 @@ export function LayoutHome() {
                     <h3 className="capitalize-first flex-shrink truncate text-base font-normal">
                       {event.title}
                     </h3>
-                    <div className="">Arrow</div>
+                    <IconArrowLink className="text-neutral-500 dark:text-neutral-300" />
                   </div>
                 </Link>
               </li>
