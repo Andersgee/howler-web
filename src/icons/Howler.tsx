@@ -1,16 +1,20 @@
-type Props = {
-  className?: string;
-};
+import type { IconProps } from ".";
 
-export function HowlerIcon({ className = "" }: Props) {
+export function IconHowler({
+  className,
+  width = 48,
+  height = 48,
+  ...rest
+}: IconProps) {
   return (
     <svg
-      className={className}
-      width="48"
-      height="48"
+      width={width}
+      height={height}
       viewBox="0 0 475 475"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      {...rest}
+      className={className}
     >
       <circle cx="237" cy="237" r="220" fill="#fff" />
       <path
