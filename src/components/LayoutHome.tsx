@@ -5,7 +5,7 @@ import { IconWhere } from "src/icons/Where";
 import { IconWho } from "src/icons/Who";
 import { InputWhen } from "./Input";
 import { useState } from "react";
-import { api } from "src/utils/api";
+import { type RouterOutputs, api } from "src/utils/api";
 import { hashidFromNumber } from "src/utils/hashids";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -16,6 +16,19 @@ const OPTIONS_WHO = {
   c: "My friends and their friends",
 };
 
+function useEvents(when: Date, what: string) {
+  const [events, setEvents] = useState<RouterOutputs["event"]["search"]>([]);
+
+  api.event.search.useQuery(
+    { when, what },
+    {
+      onSuccess: (d) => setEvents(d),
+    }
+  );
+
+  return events;
+}
+
 export function LayoutHome() {
   const [dateWhen, setDateWhen] = useState(new Date());
   const [textWhat, setTextWhat] = useState("");
@@ -23,10 +36,7 @@ export function LayoutHome() {
   const [optionWho, setOptionWho] = useState(OPTIONS_WHO.a);
   const router = useRouter();
 
-  const { data: events } = api.event.search.useQuery({
-    when: dateWhen,
-    what: textWhat,
-  });
+  const events = useEvents(dateWhen, textWhat);
   const { mutateAsync: createEvent } = api.event.create.useMutation();
 
   const onCreate = async () => {
@@ -108,8 +118,9 @@ export function LayoutHome() {
         </div>
         <div className="flex-grow bg-green-500 xl:flex-1">
           <h2 className="text-center text-2xl">Stuff happening</h2>
+
           <ul>
-            {events?.map((event) => (
+            {events.map((event) => (
               <li key={event.id}>
                 <Link prefetch={false} href={hashidFromNumber(event.id)}>
                   {event.title}
