@@ -7,6 +7,8 @@ import { InputWhen } from "./Input";
 import { useState } from "react";
 import { api } from "src/utils/api";
 import { hashidFromNumber } from "src/utils/hashids";
+import Link from "next/link";
+import { useRouter } from "next/router";
 
 const OPTIONS_WHO = {
   a: "Who? (anyone)",
@@ -19,6 +21,7 @@ export function LayoutHome() {
   const [textWhat, setTextWhat] = useState("");
   const [textWhere, setTextWhere] = useState("");
   const [optionWho, setOptionWho] = useState(OPTIONS_WHO.a);
+  const router = useRouter();
 
   const { data: events } = api.event.search.useQuery({
     when: dateWhen,
@@ -34,7 +37,16 @@ export function LayoutHome() {
       who: optionWho,
     });
     console.log({ createdEvent });
-    console.log("createdEvent hashid:", hashidFromNumber(createdEvent.id));
+    //console.log("createdEvent hashid:", hashidFromNumber(createdEvent.id));
+    const hashId = hashidFromNumber(createdEvent.id);
+    router
+      .push(hashId)
+      .then(() => {
+        //do nothing
+      })
+      .catch(() => {
+        //do nothing
+      });
   };
 
   return (
@@ -98,7 +110,11 @@ export function LayoutHome() {
           <h2 className="text-center text-2xl">Stuff happening</h2>
           <ul>
             {events?.map((event) => (
-              <li key={event.id}>{event.title}</li>
+              <li key={event.id}>
+                <Link prefetch={false} href={hashidFromNumber(event.id)}>
+                  {event.title}
+                </Link>
+              </li>
             ))}
           </ul>
         </div>
