@@ -9,6 +9,7 @@ import { type RouterOutputs, api } from "src/utils/api";
 import { hashidFromNumber } from "src/utils/hashids";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { startOfDay } from "date-fns";
 
 const OPTIONS_WHO = {
   a: "Who? (anyone)",
@@ -16,27 +17,25 @@ const OPTIONS_WHO = {
   c: "My friends and their friends",
 };
 
-function useEvents(when: Date, what: string) {
+function useQueriedEvents(when: Date, what: string) {
   const [events, setEvents] = useState<RouterOutputs["event"]["search"]>([]);
-
   api.event.search.useQuery(
     { when, what },
     {
-      onSuccess: (d) => setEvents(d),
+      onSuccess: (data) => setEvents(data),
     }
   );
-
   return events;
 }
 
 export function LayoutHome() {
-  const [dateWhen, setDateWhen] = useState(new Date());
+  const [dateWhen, setDateWhen] = useState(startOfDay(new Date()));
   const [textWhat, setTextWhat] = useState("");
   const [textWhere, setTextWhere] = useState("");
   const [optionWho, setOptionWho] = useState(OPTIONS_WHO.a);
   const router = useRouter();
 
-  const events = useEvents(dateWhen, textWhat);
+  const events = useQueriedEvents(dateWhen, textWhat);
   const { mutateAsync: createEvent } = api.event.create.useMutation();
 
   const onCreate = async () => {
@@ -46,8 +45,6 @@ export function LayoutHome() {
       where: textWhere,
       who: optionWho,
     });
-    console.log({ createdEvent });
-    //console.log("createdEvent hashid:", hashidFromNumber(createdEvent.id));
     const hashId = hashidFromNumber(createdEvent.id);
     router
       .push(hashId)
@@ -60,11 +57,11 @@ export function LayoutHome() {
   };
 
   return (
-    <main className="container bg-orange-500">
+    <main className="container">
       <div className="flex h-screen flex-col gap-4 xl:flex-row">
-        <div className="bg-purple-500 xl:flex-1">
+        <div className="border-b-2 xl:flex-1 xl:border-b-0 xl:border-r-2">
           <h2 className="text-center text-2xl">What do</h2>
-          <div className="flex flex-col gap-4">
+          <div className="mx-4 flex flex-col gap-4">
             <div className="flex items-center gap-1">
               <IconWhat />
               <input
@@ -72,7 +69,7 @@ export function LayoutHome() {
                 value={textWhat}
                 onChange={(e) => setTextWhat(e.target.value)}
                 placeholder="What? (anything)"
-                className="w-60 px-2 py-1"
+                className="w-60 bg-white px-2 py-1 dark:bg-black"
               />
             </div>
             <div className="flex items-center gap-1">
@@ -82,7 +79,7 @@ export function LayoutHome() {
                 value={textWhere}
                 onChange={(e) => setTextWhere(e.target.value)}
                 placeholder="Where? (anywhere)"
-                className="w-60 px-2 py-1"
+                className="w-60 bg-white px-2 py-1 dark:bg-black"
               />
             </div>
             <div className="flex items-center gap-1">
@@ -93,7 +90,7 @@ export function LayoutHome() {
               <IconWho />
               <select
                 value={optionWho}
-                className="w-60 bg-white px-2 py-2 text-neutral-400"
+                className="w-60 bg-white px-2 py-2 text-neutral-400 dark:bg-black"
                 onChange={(e) => setOptionWho(e.target.value)}
               >
                 {Object.entries(OPTIONS_WHO).map(([k, str]) => (
@@ -109,21 +106,30 @@ export function LayoutHome() {
             <p className="mb-1 text-center text-sm">make something happen</p>
             <button
               onClick={() => void onCreate()}
-              className="flex w-40 items-center justify-center rounded-full bg-blue-50 px-2 py-2 hover:bg-blue-300"
+              className="flex w-40 items-center justify-center rounded-full border-2 border-black bg-blue-50 px-2 py-2 transition-colors hover:bg-blue-200"
             >
-              <span className="mr-2 text-2xl">Howl</span>
+              <span className="mr-2 text-2xl text-black">Howl</span>
               <IconHowler />
             </button>
           </div>
         </div>
-        <div className="flex-grow bg-green-500 xl:flex-1">
+        <div className="flex-grow xl:flex-1">
           <h2 className="text-center text-2xl">Stuff happening</h2>
 
           <ul>
             {events.map((event) => (
               <li key={event.id}>
-                <Link prefetch={false} href={hashidFromNumber(event.id)}>
-                  {event.title}
+                <Link
+                  className="block border-b py-4 transition-colors hover:bg-neutral-100 dark:hover:bg-neutral-800"
+                  prefetch={false}
+                  href={hashidFromNumber(event.id)}
+                >
+                  <div className="flex justify-between px-4">
+                    <h3 className="capitalize-first flex-shrink truncate text-base font-normal">
+                      {event.title}
+                    </h3>
+                    <div className="">Arrow</div>
+                  </div>
                 </Link>
               </li>
             ))}

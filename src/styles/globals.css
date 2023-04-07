@@ -1,3 +1,47 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-neutral-50 font-sans text-neutral-800 dark:bg-neutral-900 dark:text-neutral-100;
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-sans text-lg font-medium text-black dark:text-white;
+  }
+
+  div {
+    @apply border-neutral-300 dark:border-neutral-600;
+  }
+
+  /*
+      h1,
+      h2 {
+        letter-spacing: -0.03em;
+      }
+      
+      a {
+        @apply font-sans text-neutral-600 underline decoration-dotted  hover:text-neutral-500 hover:decoration-solid dark:text-neutral-300 dark:hover:text-neutral-200;
+      }
+      */
+  p {
+    @apply max-w-[55ch] font-sans text-base font-normal leading-[1.55] tracking-[0.15px] text-neutral-600 [word-spacing:0.5px] dark:text-neutral-300;
+    /*
+        word-spacing: 0.5px;
+        letter-spacing: 0.15px;
+        line-height: 1.55;
+        */
+  }
+}
+
+.capitalize-first {
+  text-transform: lowercase;
+}
+.capitalize-first:first-letter {
+  text-transform: uppercase;
+}

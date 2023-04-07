@@ -59,9 +59,9 @@ export const eventRouter = createTRPCRouter({
     .mutation(({ input, ctx }) => {
       return ctx.prisma.event.create({
         data: {
-          title: input.what,
+          title: input.what.trim(),
           date: input.when,
-          description: "no description yet",
+          description: "",
         },
       });
     }),

@@ -38,10 +38,10 @@ export function InputWhen({
 }: //...rest
 Props) {
   return (
-    <div className="relative flex w-60 justify-between bg-white ">
+    <div className="relative flex w-60 justify-between bg-white dark:bg-black">
       <span className="absolute left-2 top-1 pr-1 text-neutral-400">When?</span>
       <input
-        className="w-full py-1 pl-24 pr-1 "
+        className="w-full bg-white py-1 pl-24 pr-1 dark:bg-black"
         //type="datetime-local"
         type="date"
         value={dateString(date)}
