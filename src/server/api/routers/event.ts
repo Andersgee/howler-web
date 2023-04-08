@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { startOfDay } from "date-fns";
+import { startOfHour } from "date-fns";
 
 import {
   createTRPCRouter,
@@ -42,7 +42,7 @@ export const eventRouter = createTRPCRouter({
         where: {
           title: searchQuery ? { search: searchQuery } : undefined,
           date: {
-            gte: startOfDay(input.when),
+            gte: startOfHour(input.when),
           },
         },
       });

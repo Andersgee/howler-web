@@ -9,7 +9,7 @@ import { type RouterOutputs, api } from "src/utils/api";
 import { hashidFromNumber } from "src/utils/hashids";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { startOfDay } from "date-fns";
+import { startOfDay, startOfHour } from "date-fns";
 import { IconArrowLink } from "src/icons/ArrowLink";
 
 const OPTIONS_WHO = {
@@ -30,7 +30,7 @@ function useQueriedEvents(when: Date, what: string) {
 }
 
 export function LayoutHome() {
-  const [dateWhen, setDateWhen] = useState(startOfDay(new Date()));
+  const [dateWhen, setDateWhen] = useState(startOfHour(new Date()));
   const [textWhat, setTextWhat] = useState("");
   const [textWhere, setTextWhere] = useState("");
   const [optionWho, setOptionWho] = useState(OPTIONS_WHO.a);
@@ -70,7 +70,7 @@ export function LayoutHome() {
                 value={textWhat}
                 onChange={(e) => setTextWhat(e.target.value)}
                 placeholder="What? (anything)"
-                className="w-60 bg-white px-2 py-1 dark:bg-black"
+                className="w-64 bg-white px-2 py-1 dark:bg-black"
               />
             </div>
             <div className="flex items-center gap-1">
@@ -80,7 +80,7 @@ export function LayoutHome() {
                 value={textWhere}
                 onChange={(e) => setTextWhere(e.target.value)}
                 placeholder="Where? (anywhere)"
-                className="w-60 bg-white px-2 py-1 dark:bg-black"
+                className="w-64 bg-white px-2 py-1 dark:bg-black"
               />
             </div>
             <div className="flex items-center gap-1">
@@ -91,7 +91,7 @@ export function LayoutHome() {
               <IconWho />
               <select
                 value={optionWho}
-                className="w-60 bg-white px-2 py-2 text-neutral-400 dark:bg-black"
+                className="w-64 bg-white px-2 py-2 text-neutral-400 dark:bg-black"
                 onChange={(e) => setOptionWho(e.target.value)}
               >
                 {Object.entries(OPTIONS_WHO).map(([k, str]) => (

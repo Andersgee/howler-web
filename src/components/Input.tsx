@@ -38,13 +38,13 @@ export function InputWhen({
 }: //...rest
 Props) {
   return (
-    <div className="relative flex w-60 justify-between bg-white dark:bg-black">
+    <div className="relative flex w-64 justify-between bg-white dark:bg-black">
       <span className="absolute left-2 top-1 pr-1 text-neutral-400">When?</span>
       <input
-        className="w-full bg-white py-1 pl-24 pr-1 dark:bg-black"
+        className="w-full bg-white py-1 pl-16 pr-1 dark:bg-black"
         //type="datetime-local"
-        type="date"
-        value={dateString(date)}
+        type="datetime-local"
+        value={datetimelocalString(date)}
         onChange={(e) => {
           if (e.target.value) {
             onChange(new Date(e.target.value));
@@ -66,9 +66,9 @@ Props) {
  *
  * which is almost just date.toISOString() but not quite.
  */
-function datetimelocalString(date: Date, p: Precision) {
+function datetimelocalString(date: Date, p: Precision = "m") {
   //const n = p === "s" ? 19 : 16;
-  const n = p === "s" ? 19 : 10;
+  const n = p === "s" ? 19 : 16;
   return localIsoString(date).slice(0, n);
 }
 
