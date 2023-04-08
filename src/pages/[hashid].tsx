@@ -9,6 +9,7 @@ import { useSession } from "next-auth/react";
 import { api } from "src/utils/api";
 import { useDialogDispatch } from "src/context/DialogContext";
 import Link from "next/link";
+import { SEO } from "src/components/SEO";
 
 type Props = {
   id: number;
@@ -64,62 +65,74 @@ export default function Page({ id, hashid, event }: Props) {
   }
 
   return (
-    <main className="container">
-      <div>
-        <Link href="/">Home</Link>
-      </div>
-      <div className="mx-4 flex h-screen flex-col">
-        <div className="flex flex-col items-center">
-          <div className="mt-10 flex flex-wrap gap-x-2 gap-y-2">
-            <div className="flex items-baseline gap-2 bg-orange-500 p-2">
-              <p>what?</p>
-              <h2 className="capitalize-first">{event.what || "anything"}</h2>
-            </div>
-            <div className="flex items-baseline gap-2 bg-purple-500 p-2">
-              <p>where?</p>
-              <h2 className="">{event.where || "anywhere"}</h2>
-            </div>
+    <>
+      <SEO
+        title={`${event.what || "anything"} | Howler`}
+        description={`what: ${event.what || "anything"} | where: ${
+          event.where || "anywhere"
+        } | when: ${format(event.when, "yyyy-MM-dd HH:mm")} | who: ${
+          event.creator.name || ""
+        } and ${event.who}`}
+        url="https://howler.andyfx.net"
+        image="/icons/favicon-512x512.png"
+      />
+      <main className="container">
+        <div>
+          <Link href="/">Home</Link>
+        </div>
+        <div className="mx-4 flex h-screen flex-col">
+          <div className="flex flex-col items-center">
+            <div className="mt-10 flex flex-wrap gap-x-2 gap-y-2">
+              <div className="flex items-baseline gap-2 bg-orange-500 p-2">
+                <p>what?</p>
+                <h2 className="capitalize-first">{event.what || "anything"}</h2>
+              </div>
+              <div className="flex items-baseline gap-2 bg-purple-500 p-2">
+                <p>where?</p>
+                <h2 className="">{event.where || "anywhere"}</h2>
+              </div>
 
-            <div className="flex items-baseline gap-2 bg-yellow-500 p-2">
-              <p>when?</p>
-              <h2 className="">{`${format(
-                event.when,
-                "yyyy-MM-dd HH:mm"
-              )} (in ${formatDistanceToNow(event.when)})`}</h2>
+              <div className="flex items-baseline gap-2 bg-yellow-500 p-2">
+                <p>when?</p>
+                <h2 className="">{`${format(
+                  event.when,
+                  "yyyy-MM-dd HH:mm"
+                )} (in ${formatDistanceToNow(event.when)})`}</h2>
+              </div>
+              <div className="flex items-baseline gap-2 bg-green-500 p-2">
+                <p>who?</p>
+                <h2 className="">
+                  {event.creator.name} and {event.who}
+                </h2>
+              </div>
             </div>
-            <div className="flex items-baseline gap-2 bg-green-500 p-2">
-              <p>who?</p>
-              <h2 className="">
-                {event.creator.name} and {event.who}
-              </h2>
+            <div className="mb-12 mt-4">
+              <p>info: {event.info || "no additional info"}</p>
             </div>
+            {userEventPivot ? (
+              <button
+                onClick={() => void handleLeaveClick()}
+                className="flex w-56 items-center justify-center rounded-full border-2 border-black bg-green-200 px-2 py-2 transition-colors hover:bg-red-400"
+              >
+                <span className="mr-2 text-2xl text-black">Im going!</span>
+                <IconHowler />
+              </button>
+            ) : (
+              <button
+                onClick={() => void handleJoinClick()}
+                className="flex w-56 items-center justify-center rounded-full border-2 border-black bg-blue-50 px-2 py-2 transition-colors hover:bg-blue-200"
+              >
+                <span className="mr-2 text-2xl text-black">Lets go!</span>
+                <IconHowler />
+              </button>
+            )}
           </div>
-          <div className="mb-12 mt-4">
-            <p>info: {event.info || "no additional info"}</p>
+          <div className="mt-6 flex-1 border-t-2 pt-6 text-center">
+            maybe message chat here?
           </div>
-          {userEventPivot ? (
-            <button
-              onClick={() => void handleLeaveClick()}
-              className="flex w-56 items-center justify-center rounded-full border-2 border-black bg-green-200 px-2 py-2 transition-colors hover:bg-red-400"
-            >
-              <span className="mr-2 text-2xl text-black">Im going!</span>
-              <IconHowler />
-            </button>
-          ) : (
-            <button
-              onClick={() => void handleJoinClick()}
-              className="flex w-56 items-center justify-center rounded-full border-2 border-black bg-blue-50 px-2 py-2 transition-colors hover:bg-blue-200"
-            >
-              <span className="mr-2 text-2xl text-black">Lets go!</span>
-              <IconHowler />
-            </button>
-          )}
         </div>
-        <div className="mt-6 flex-1 border-t-2 pt-6 text-center">
-          maybe message chat here?
-        </div>
-      </div>
-    </main>
+      </main>
+    </>
   );
 }
 
