@@ -6,6 +6,9 @@ import { getEvent, type Event } from "src/utils/staticprops";
 import { format, formatDistanceToNow } from "date-fns";
 import { IconHowler } from "src/icons/Howler";
 import { useSession } from "next-auth/react";
+import { api } from "src/utils/api";
+import { useDialogDispatch } from "src/context/DialogContext";
+import Link from "next/link";
 
 type Props = {
   id: number;
@@ -16,6 +19,44 @@ type Props = {
 export default function Page({ id, hashid, event }: Props) {
   const { data: session } = useSession();
   const router = useRouter();
+  const dialogDispatch = useDialogDispatch();
+
+  const utils = api.useContext();
+
+  const { data: userEventPivot } = api.event.userEventPivot.useQuery(
+    {
+      eventId: id,
+    },
+    {
+      enabled: session?.user !== undefined,
+    }
+  );
+  const { mutateAsync: joinEvent } = api.event.join.useMutation({
+    onSuccess: async () => {
+      await utils.event.userEventPivot.invalidate({ eventId: id });
+    },
+  });
+  const { mutateAsync: leaveEvent } = api.event.leave.useMutation({
+    onSuccess: async () => {
+      await utils.event.userEventPivot.invalidate({ eventId: id });
+    },
+  });
+
+  const handleJoinClick = async () => {
+    if (session?.user !== undefined) {
+      await joinEvent({ eventId: id });
+    } else {
+      dialogDispatch({ type: "show", name: "signin" });
+    }
+  };
+
+  const handleLeaveClick = async () => {
+    if (session?.user !== undefined) {
+      await leaveEvent({ eventId: id });
+    } else {
+      dialogDispatch({ type: "show", name: "signin" });
+    }
+  };
 
   if (router.isFallback) {
     //possibly skeleton here
@@ -24,16 +65,19 @@ export default function Page({ id, hashid, event }: Props) {
 
   return (
     <main className="container">
+      <div>
+        <Link href="/">Home</Link>
+      </div>
       <div className="mx-4 flex h-screen flex-col">
         <div className="flex flex-col items-center">
           <div className="mt-10 flex flex-wrap gap-x-2 gap-y-2">
             <div className="flex items-baseline gap-2 bg-orange-500 p-2">
               <p>what?</p>
-              <h2 className="capitalize-first">{event.what}</h2>
+              <h2 className="capitalize-first">{event.what || "anything"}</h2>
             </div>
             <div className="flex items-baseline gap-2 bg-purple-500 p-2">
               <p>where?</p>
-              <h2 className="">{event.where}</h2>
+              <h2 className="">{event.where || "anywhere"}</h2>
             </div>
 
             <div className="flex items-baseline gap-2 bg-yellow-500 p-2">
@@ -53,11 +97,20 @@ export default function Page({ id, hashid, event }: Props) {
           <div className="mb-12 mt-4">
             <p>info: {event.info || "no additional info"}</p>
           </div>
-          {session?.user.id === event.creatorId ? (
-            <div>you created this event</div>
-          ) : (
-            <button className="flex w-56 items-center justify-center rounded-full border-2 border-black bg-blue-50 px-2 py-2 transition-colors hover:bg-blue-200">
+          {userEventPivot ? (
+            <button
+              onClick={() => void handleLeaveClick()}
+              className="flex w-56 items-center justify-center rounded-full border-2 border-black bg-green-200 px-2 py-2 transition-colors hover:bg-red-400"
+            >
               <span className="mr-2 text-2xl text-black">Im going!</span>
+              <IconHowler />
+            </button>
+          ) : (
+            <button
+              onClick={() => void handleJoinClick()}
+              className="flex w-56 items-center justify-center rounded-full border-2 border-black bg-blue-50 px-2 py-2 transition-colors hover:bg-blue-200"
+            >
+              <span className="mr-2 text-2xl text-black">Lets go!</span>
               <IconHowler />
             </button>
           )}

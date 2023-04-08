@@ -68,4 +68,50 @@ export const eventRouter = createTRPCRouter({
         },
       });
     }),
+  join: protectedProcedure
+    .input(
+      z.object({
+        eventId: z.number(),
+      })
+    )
+    .mutation(({ input, ctx }) => {
+      return ctx.prisma.userEventPivot.create({
+        data: {
+          eventId: input.eventId,
+          userId: ctx.session.user.id,
+        },
+      });
+    }),
+  leave: protectedProcedure
+    .input(
+      z.object({
+        eventId: z.number(),
+      })
+    )
+    .mutation(({ input, ctx }) => {
+      return ctx.prisma.userEventPivot.delete({
+        where: {
+          userId_eventId: {
+            eventId: input.eventId,
+            userId: ctx.session.user.id,
+          },
+        },
+      });
+    }),
+  userEventPivot: protectedProcedure
+    .input(
+      z.object({
+        eventId: z.number(),
+      })
+    )
+    .query(async ({ input, ctx }) => {
+      return ctx.prisma.userEventPivot.findUnique({
+        where: {
+          userId_eventId: {
+            eventId: input.eventId,
+            userId: ctx.session.user.id,
+          },
+        },
+      });
+    }),
 });

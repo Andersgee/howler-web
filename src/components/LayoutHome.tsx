@@ -13,6 +13,7 @@ import { startOfHour } from "date-fns";
 import { IconArrowLink } from "src/icons/ArrowLink";
 import { useSession } from "next-auth/react";
 import { useDialogDispatch } from "src/context/DialogContext";
+import { signOut } from "next-auth/react";
 
 export const OPTIONS_WHO = {
   anyone: "Who? (anyone)",
@@ -36,7 +37,7 @@ export function LayoutHome() {
   const [dateWhen, setDateWhen] = useState(startOfHour(new Date()));
   const [textWhat, setTextWhat] = useState("");
   const [textWhere, setTextWhere] = useState("");
-  const [optionWho, setOptionWho] = useState(OPTIONS_WHO.anyone);
+  const [optionWho, setOptionWho] = useState("anyone");
   const router = useRouter();
   const dialogDispatch = useDialogDispatch();
   const events = useQueriedEvents(dateWhen, textWhat);
@@ -122,6 +123,10 @@ export function LayoutHome() {
               <IconHowler />
             </button>
           </div>
+
+          {session?.user !== undefined && (
+            <button onClick={() => void signOut()}>sign out</button>
+          )}
         </div>
         <div className="flex-grow xl:flex-1">
           <h2 className="text-center text-2xl">Stuff happening</h2>
@@ -136,7 +141,7 @@ export function LayoutHome() {
                 >
                   <div className="flex justify-between px-4">
                     <h3 className="capitalize-first flex-shrink truncate text-base font-normal">
-                      {event.what}
+                      {event.what || "anything"}
                     </h3>
                     <IconArrowLink className="text-neutral-500 dark:text-neutral-300" />
                   </div>
