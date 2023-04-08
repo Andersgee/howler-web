@@ -3,6 +3,8 @@ import { type AppType } from "next/app";
 import { type Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
 import { api } from "src/utils/api";
+import { DialogProvider } from "src/context/DialogContext";
+import { SignInDialog } from "src/components/Signin";
 
 const App: AppType<{ session: Session | null }> = ({
   Component,
@@ -10,7 +12,10 @@ const App: AppType<{ session: Session | null }> = ({
 }) => {
   return (
     <SessionProvider session={session}>
-      <Component {...pageProps} />
+      <DialogProvider>
+        <SignInDialog />
+        <Component {...pageProps} />
+      </DialogProvider>
     </SessionProvider>
   );
 };

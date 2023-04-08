@@ -9,13 +9,15 @@ import { type RouterOutputs, api } from "src/utils/api";
 import { hashidFromNumber } from "src/utils/hashids";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { startOfDay, startOfHour } from "date-fns";
+import { startOfHour } from "date-fns";
 import { IconArrowLink } from "src/icons/ArrowLink";
+import { useSession } from "next-auth/react";
+import { useDialogDispatch } from "src/context/DialogContext";
 
-const OPTIONS_WHO = {
-  a: "Who? (anyone)",
-  b: "Only my friends",
-  c: "My friends and their friends",
+export const OPTIONS_WHO = {
+  anyone: "Who? (anyone)",
+  friends: "Only my friends",
+  friendsOfFriends: "My friends and their friends",
 };
 
 function useQueriedEvents(when: Date, what: string) {
@@ -30,31 +32,38 @@ function useQueriedEvents(when: Date, what: string) {
 }
 
 export function LayoutHome() {
+  const { data: session } = useSession();
   const [dateWhen, setDateWhen] = useState(startOfHour(new Date()));
   const [textWhat, setTextWhat] = useState("");
   const [textWhere, setTextWhere] = useState("");
-  const [optionWho, setOptionWho] = useState(OPTIONS_WHO.a);
+  const [optionWho, setOptionWho] = useState(OPTIONS_WHO.anyone);
   const router = useRouter();
-
+  const dialogDispatch = useDialogDispatch();
   const events = useQueriedEvents(dateWhen, textWhat);
   const { mutateAsync: createEvent } = api.event.create.useMutation();
 
-  const onCreate = async () => {
-    const createdEvent = await createEvent({
-      what: textWhat,
-      when: dateWhen,
-      where: textWhere,
-      who: optionWho,
-    });
-    const hashId = hashidFromNumber(createdEvent.id);
-    router
-      .push(hashId)
-      .then(() => {
-        //do nothing
-      })
-      .catch(() => {
-        //do nothing
+  const handleCreateClick = async () => {
+    if (session?.user !== undefined) {
+      const createdEvent = await createEvent({
+        what: textWhat,
+        when: dateWhen,
+        where: textWhere,
+        who: optionWho,
       });
+      const hashId = hashidFromNumber(createdEvent.id);
+      router
+        .push(hashId)
+        .then(() => {
+          //do nothing
+        })
+        .catch(() => {
+          //do nothing
+        });
+    } else {
+      console.log("sign in...");
+      dialogDispatch({ type: "show", name: "signin" });
+      //dialogDispatch({type: "signin"})
+    }
   };
 
   return (
@@ -95,7 +104,7 @@ export function LayoutHome() {
                 onChange={(e) => setOptionWho(e.target.value)}
               >
                 {Object.entries(OPTIONS_WHO).map(([k, str]) => (
-                  <option key={k} value={str}>
+                  <option key={k} value={k}>
                     {str}
                   </option>
                 ))}
@@ -106,7 +115,7 @@ export function LayoutHome() {
           <div className="my-6 ml-6 flex w-60 flex-col items-center">
             <p className="mb-1 text-center text-sm">make something happen</p>
             <button
-              onClick={() => void onCreate()}
+              onClick={() => void handleCreateClick()}
               className="flex w-40 items-center justify-center rounded-full border-2 border-black bg-blue-50 px-2 py-2 transition-colors hover:bg-blue-200"
             >
               <span className="mr-2 text-2xl text-black">Howl</span>
@@ -127,7 +136,7 @@ export function LayoutHome() {
                 >
                   <div className="flex justify-between px-4">
                     <h3 className="capitalize-first flex-shrink truncate text-base font-normal">
-                      {event.info}
+                      {event.what}
                     </h3>
                     <IconArrowLink className="text-neutral-500 dark:text-neutral-300" />
                   </div>
