@@ -81,7 +81,7 @@ type Props = {
 export function SEO({
   title,
   type = "website",
-  site_name = "VåraVägar",
+  site_name = "Howler",
   url,
   image,
   audio,
