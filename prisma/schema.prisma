@@ -50,7 +50,8 @@ model User {
     image         String?
     accounts      Account[]
     sessions      Session[]
-    events        UserEventPivot[]
+    events        Event[]
+    joinedEvents  UserEventPivot[]
 }
 
 model VerificationToken {
@@ -80,25 +81,25 @@ model UserEventPivot {
 model Place {
     id     Int     @id @default(autoincrement())
     label  String?
-    lng    Float
-    lat    Float
+    lnglat String?
     events Event[]
 }
 
 model Event {
-    id Int @id @default(autoincrement())
+    id        Int    @id @default(autoincrement())
+    creator   User   @relation(fields: [creatorId], references: [id])
+    creatorId String
 
-    //what
-    title   String
-    //where
-    place   Place?           @relation(fields: [placeId], references: [id])
+    what  String
+    where String
+    when  DateTime
+    who   String
+    info  String
+
+    place   Place? @relation(fields: [placeId], references: [id])
     placeId Int?
-    //when
-    date    DateTime
-    //who
-    users   UserEventPivot[]
 
-    description String
+    joinedUsers UserEventPivot[]
 
-    @@fulltext([title])
+    @@fulltext([what])
 }

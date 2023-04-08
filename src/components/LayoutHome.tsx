@@ -127,7 +127,7 @@ export function LayoutHome() {
                 >
                   <div className="flex justify-between px-4">
                     <h3 className="capitalize-first flex-shrink truncate text-base font-normal">
-                      {event.title}
+                      {event.info}
                     </h3>
                     <IconArrowLink className="text-neutral-500 dark:text-neutral-300" />
                   </div>

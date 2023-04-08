@@ -29,7 +29,7 @@ export default function Page({ id, hashid, event }: Props) {
           <div className="mt-10 flex flex-wrap gap-x-2 gap-y-2">
             <div className="flex items-baseline gap-2 bg-orange-500 p-2">
               <p>what?</p>
-              <h2 className="capitalize-first">{event.title}</h2>
+              <h2 className="capitalize-first">{event.what}</h2>
             </div>
             <div className="flex items-baseline gap-2 bg-purple-500 p-2">
               <p>where?</p>
@@ -39,9 +39,9 @@ export default function Page({ id, hashid, event }: Props) {
             <div className="flex items-baseline gap-2 bg-yellow-500 p-2">
               <p>when?</p>
               <h2 className="">{`${format(
-                event.date,
+                event.when,
                 "yyyy-MM-dd HH:mm"
-              )} (in ${formatDistanceToNow(event.date)})`}</h2>
+              )} (in ${formatDistanceToNow(event.when)})`}</h2>
             </div>
             <div className="flex items-baseline gap-2 bg-green-500 p-2">
               <p>who?</p>
@@ -49,7 +49,7 @@ export default function Page({ id, hashid, event }: Props) {
             </div>
           </div>
           <div className="mb-12 mt-4">
-            <p>info: {event.description || "no additional info"}</p>
+            <p>info: {event.info || "no additional info"}</p>
           </div>
         </div>
         <div className="flex-1 pt-3 text-center">maybe message chat here?</div>

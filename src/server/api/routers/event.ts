@@ -40,14 +40,14 @@ export const eventRouter = createTRPCRouter({
       const searchQuery = searchAND(input.what);
       return ctx.prisma.event.findMany({
         where: {
-          title: searchQuery ? { search: searchQuery } : undefined,
-          date: {
+          what: searchQuery ? { search: searchQuery } : undefined,
+          when: {
             gte: startOfHour(input.when),
           },
         },
       });
     }),
-  create: publicProcedure
+  create: protectedProcedure
     .input(
       z.object({
         what: z.string(),
@@ -59,26 +59,13 @@ export const eventRouter = createTRPCRouter({
     .mutation(({ input, ctx }) => {
       return ctx.prisma.event.create({
         data: {
-          title: input.what.trim(),
-          date: input.when,
-          description: "",
+          creatorId: ctx.session.user.id,
+          what: input.what.trim(),
+          where: input.where.trim(),
+          when: input.when,
+          who: input.who,
+          info: "",
         },
       });
     }),
-
-  hello: publicProcedure
-    .input(z.object({ text: z.string() }))
-    .query(({ input }) => {
-      return {
-        greeting: `Hello ${input.text}`,
-      };
-    }),
-
-  getAll: publicProcedure.query(({ ctx }) => {
-    return ctx.prisma.example.findMany();
-  }),
-
-  getSecretMessage: protectedProcedure.query(() => {
-    return "you can now see this secret message!";
-  }),
 });
