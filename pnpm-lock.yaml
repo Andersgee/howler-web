@@ -22,6 +22,7 @@ specifiers:
   hashids: ^2.2.11
   next: ^13.2.4
   next-auth: 4.20.1
+  next-plausible: ^3.7.2
   next-superjson: ^0.0.4
   postcss: ^8.4.21
   prettier: ^2.8.6
@@ -46,6 +47,7 @@ dependencies:
   hashids: 2.2.11
   next: 13.3.0_biqbaboplfbrettd7655fr4n2y
   next-auth: 4.20.1_yucv4tfv7v7nrkw2uguegj6e7e
+  next-plausible: 3.7.2_yucv4tfv7v7nrkw2uguegj6e7e
   next-superjson: 0.0.4_ewirk4wma7x43vezorlkvgf2qy
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
@@ -2415,6 +2417,18 @@ packages:
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
       uuid: 8.3.2
+    dev: false
+
+  /next-plausible/3.7.2_yucv4tfv7v7nrkw2uguegj6e7e:
+    resolution: {integrity: sha512-9PqFiVtD1kZO5gHFYTcgilHhg2WhMzD6I4NK/RUh9DGavD1N11IhNAvyGLFmvB3f4FtHC9IoAsauYDtQBt+riA==}
+    peerDependencies:
+      next: ^11.1.0 || ^12.0.0 || ^13.0.0
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0
+      react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
+    dependencies:
+      next: 13.3.0_biqbaboplfbrettd7655fr4n2y
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
     dev: false
 
   /next-superjson/0.0.4_ewirk4wma7x43vezorlkvgf2qy:

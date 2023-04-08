@@ -1,4 +1,5 @@
 import { withSuperjson } from "next-superjson";
+import { withPlausibleProxy } from "next-plausible";
 
 /**
  * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation.
@@ -21,4 +22,4 @@ const config = {
     defaultLocale: "en",
   },
 };
-export default withSuperjson()(config);
+export default withPlausibleProxy()(withSuperjson()(config));
