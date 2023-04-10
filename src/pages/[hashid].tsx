@@ -94,7 +94,6 @@ export default function Page({ id, hashid, event }: Props) {
 
               <div className="flex items-baseline gap-2 bg-yellow-500 p-2">
                 <p>when?</p>
-                <div>{event.when.getTime() > Date.now() ? "aaa" : "hej"}</div>
                 <h2 className="">
                   {`${format(event.when, "yyyy-MM-dd HH:mm")} (${formatDistance(
                     event.when,
