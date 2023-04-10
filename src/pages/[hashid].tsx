@@ -3,7 +3,7 @@ import { stringFromParam } from "src/utils/param";
 import type { GetStaticPaths, GetStaticProps } from "next";
 import { useRouter } from "next/router";
 import { getEvent, type Event } from "src/utils/staticprops";
-import { format, formatDistanceToNow } from "date-fns";
+import { format, formatDistance } from "date-fns";
 import { IconHowler } from "src/icons/Howler";
 import { useSession } from "next-auth/react";
 import { api } from "src/utils/api";
@@ -51,6 +51,8 @@ export default function Page({ id, hashid, event }: Props) {
     }
   };
 
+  const dateNow = Date.now();
+
   const handleLeaveClick = async () => {
     if (session?.user !== undefined) {
       await leaveEvent({ eventId: id });
@@ -94,10 +96,16 @@ export default function Page({ id, hashid, event }: Props) {
 
               <div className="flex items-baseline gap-2 bg-yellow-500 p-2">
                 <p>when?</p>
-                <h2 className="">{`${format(
-                  event.when,
-                  "yyyy-MM-dd HH:mm"
-                )} (in ${formatDistanceToNow(event.when)})`}</h2>
+                <div>{event.when.getTime() > Date.now() ? "aaa" : "hej"}</div>
+                <h2 className="">{`${format(event.when, "yyyy-MM-dd HH:mm")} ${
+                  event.when.getTime() > dateNow
+                    ? `(${formatDistance(dateNow, event.when, {
+                        addSuffix: true,
+                      })})`
+                    : `(${formatDistance(event.when, dateNow, {
+                        addSuffix: true,
+                      })})`
+                }`}</h2>
               </div>
               <div className="flex items-baseline gap-2 bg-green-500 p-2">
                 <p>who?</p>
