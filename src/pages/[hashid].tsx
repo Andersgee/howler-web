@@ -96,13 +96,13 @@ export default function Page({ id, hashid, event }: Props) {
                 <p>when?</p>
                 <div>{event.when.getTime() > Date.now() ? "aaa" : "hej"}</div>
                 <h2 className="">
-                  {`${format(event.when, "yyyy-MM-dd HH:mm")} ${formatDistance(
-                    Date.now(),
+                  {`${format(event.when, "yyyy-MM-dd HH:mm")} (${formatDistance(
                     event.when,
+                    Date.now(),
                     {
                       addSuffix: true,
                     }
-                  )}`}
+                  )})`}
                 </h2>
               </div>
               <div className="flex items-baseline gap-2 bg-green-500 p-2">
